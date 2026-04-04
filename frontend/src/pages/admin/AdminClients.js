@@ -26,7 +26,7 @@ const AdminClients = () => {
 
   const fetchClients = useCallback(async () => {
     try {
-      const response = await axios.get('/api/clients', {
+      const response = await axios.get('https://client-search-page-1.onrender.com/api/clients', {
         params: { search: searchTerm }
       });
       if (response.data.success) {
@@ -127,14 +127,14 @@ const AdminClients = () => {
 
     try {
       if (editingClient) {
-        const response = await axios.put(`/api/clients/${editingClient._id}`, formData);
+        const response = await axios.put(`https://client-search-page-1.onrender.com/api/clients/${editingClient._id}`, formData);
         if (response.data.success) {
           toast.success('Client updated successfully');
           fetchClients();
           closeModal();
         }
       } else {
-        const response = await axios.post('/api/clients', formData);
+        const response = await axios.post('https://client-search-page-1.onrender.com/api/clients', formData);
         if (response.data.success) {
           toast.success('Client created successfully');
           fetchClients();
@@ -152,7 +152,7 @@ const AdminClients = () => {
     }
 
     try {
-      const response = await axios.delete(`/api/clients/${clientId}`);
+      const response = await axios.delete(`https://client-search-page-1.onrender.com/api/clients/${clientId}`);
       if (response.data.success) {
         toast.success('Client deleted successfully');
         fetchClients();

@@ -34,7 +34,7 @@ const ClientSearch = () => {
       if (formData.clientCode) params.clientCode = formData.clientCode;
       if (formData.clientName) params.clientName = formData.clientName;
 
-      const response = await axios.get('/api/clients/search', { params });
+      const response = await axios.get('https://client-search-page-1.onrender.com/api/clients/search', { params });
 
       if (response.data.success) {
         toast.success('Client found!');

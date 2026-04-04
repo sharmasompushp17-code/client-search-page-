@@ -22,7 +22,7 @@ const AdminPayments = () => {
 
   const fetchPayments = useCallback(async () => {
     try {
-      const response = await axios.get('/api/payments', {
+      const response = await axios.get('https://client-search-page-1.onrender.com/api/payments', {
         params: { status: statusFilter }
       });
       if (response.data.success) {
@@ -37,7 +37,7 @@ const AdminPayments = () => {
 
   const fetchClients = useCallback(async () => {
     try {
-      const response = await axios.get('/api/clients');
+      const response = await axios.get('https://client-search-page-1.onrender.com/api/clients');
       if (response.data.success) {
         setClients(response.data.clients);
       }
@@ -53,7 +53,7 @@ const AdminPayments = () => {
     }
 
     try {
-      const response = await axios.get('/api/projects', { params: { clientId } });
+      const response = await axios.get('https://client-search-page-1.onrender.com/api/projects', { params: { clientId } });
       if (response.data.success) {
         setProjects(response.data.projects);
       }
@@ -124,7 +124,7 @@ const AdminPayments = () => {
     }
 
     try {
-      const response = await axios.post('/api/payments/manual', formData);
+      const response = await axios.post('https://client-search-page-1.onrender.com/api/payments/manual', formData);
       if (response.data.success) {
         toast.success('Payment recorded successfully');
         fetchPayments();

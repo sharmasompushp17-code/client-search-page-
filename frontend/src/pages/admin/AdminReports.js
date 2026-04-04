@@ -42,11 +42,11 @@ const AdminReports = () => {
     setLoading(true);
     try {
       const [dashboardRes, earningsRes, pendingRes, projectRes, clientRes] = await Promise.all([
-        axios.get('/api/reports/dashboard'),
-        axios.get('/api/reports/earnings', { params: { year: selectedYear } }),
-        axios.get('/api/reports/pending'),
-        axios.get('/api/reports/projects'),
-        axios.get('/api/reports/clients')
+        axios.get('https://client-search-page-1.onrender.com/api/reports/dashboard'),
+        axios.get('https://client-search-page-1.onrender.com/api/reports/earnings', { params: { year: selectedYear } }),
+        axios.get('https://client-search-page-1.onrender.com/api/reports/pending'),
+        axios.get('https://client-search-page-1.onrender.com/api/reports/projects'),
+        axios.get('https://client-search-page-1.onrender.com/api/reports/clients')
       ]);
 
       if (dashboardRes.data.success) setDashboardData(dashboardRes.data.dashboard);

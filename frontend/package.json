@@ -39,5 +39,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000"
+  "axios.post": "https://client-search-page-1.onrender.com/api/clients"
 }

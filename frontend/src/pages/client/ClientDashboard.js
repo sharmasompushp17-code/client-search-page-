@@ -30,7 +30,7 @@ const ClientDashboard = () => {
 
     try {
       // Create order
-      const orderResponse = await axios.post('/api/payments/create-order', {
+      const orderResponse = await axios.post('https://client-search-page-1.onrender.com/api/payments/create-order', {
         clientId: clientData.client._id,
         projectId: project._id,
         amount: project.pendingAmount
@@ -60,7 +60,7 @@ const ClientDashboard = () => {
           handler: async (response) => {
             try {
               // Verify payment
-              const verifyResponse = await axios.post('/api/payments/verify', {
+              const verifyResponse = await axios.post('https://client-search-page-1.onrender.com/api/payments/verify', {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
@@ -70,7 +70,7 @@ const ClientDashboard = () => {
               if (verifyResponse.data.success) {
                 toast.success('Payment successful!');
                 // Refresh client data
-                const refreshResponse = await axios.get('/api/clients/search', {
+                const refreshResponse = await axios.get('https://client-search-page-1.onrender.com/api/clients/search', {
                   params: { clientCode: clientData.client.clientCode }
                 });
                 if (refreshResponse.data.success) {
@@ -112,7 +112,7 @@ const ClientDashboard = () => {
     setPaymentLoading(project._id);
 
     try {
-      const response = await axios.post('/api/payments/upi-link', {
+      const response = await axios.post('https://client-search-page-1.onrender.com/api/payments/upi-link', {
         clientId: clientData.client._id,
         projectId: project._id,
         amount: project.pendingAmount

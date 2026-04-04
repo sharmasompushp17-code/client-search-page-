@@ -34,7 +34,7 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await axios.get('/api/reports/dashboard');
+      const response = await axios.get('https://client-search-page-1.onrender.com/api/reports/dashboard');
       if (response.data.success) {
         setDashboardData(response.data.dashboard);
       }

@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await axios.get('/api/auth/me');
+          const response = await axios.get('https://client-search-page-1.onrender.com/api/auth/me');
           if (response.data.success) {
             setAdmin(response.data.admin);
           } else {
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
     // Client secret login by code + name
     if (identifier && secret && !identifier.includes('@')) {
       try {
-        const response = await axios.get('/api/clients/search', {
+        const response = await axios.get('https://client-search-page-1.onrender.com/api/clients/search', {
           params: {
             clientCode: identifier.toUpperCase(),
             clientName: secret
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
     // Existing admin email/password login fallback
     try {
-      const response = await axios.post('/api/auth/login', { email: identifier, password: secret });
+      const response = await axios.post('https://client-search-page-1.onrender.com/api/auth/login', { email: identifier, password: secret });
       
       if (response.data.success) {
         const { token: newToken, admin: adminData } = response.data;
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
 
   const updatePassword = async (currentPassword, newPassword) => {
     try {
-      const response = await axios.put('/api/auth/updatepassword', {
+      const response = await axios.put('https://client-search-page-1.onrender.com/api/auth/updatepassword', {
         currentPassword,
         newPassword
       });

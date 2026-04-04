@@ -32,7 +32,7 @@ const AdminProjects = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('/api/projects', {
+      const response = await axios.get('https://client-search-page-1.onrender.com/api/projects', {
         params: { search: searchTerm, status: statusFilter }
       });
       if (response.data.success) {
@@ -47,7 +47,7 @@ const AdminProjects = () => {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get('/api/clients');
+      const response = await axios.get('https://client-search-page-1.onrender.com/api/clients');
       if (response.data.success) {
         setClients(response.data.clients);
       }
@@ -122,14 +122,14 @@ const AdminProjects = () => {
 
     try {
       if (editingProject) {
-        const response = await axios.put(`/api/projects/${editingProject._id}`, formData);
+        const response = await axios.put(`https://client-search-page-1.onrender.com/api/projects/${editingProject._id}`, formData);
         if (response.data.success) {
           toast.success('Project updated successfully');
           fetchProjects();
           closeModal();
         }
       } else {
-        const response = await axios.post('/api/projects', formData);
+        const response = await axios.post('https://client-search-page-1.onrender.com/api/projects', formData);
         if (response.data.success) {
           toast.success('Project created successfully');
           fetchProjects();

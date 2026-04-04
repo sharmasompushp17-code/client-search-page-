@@ -12,7 +12,7 @@ const ProjectDetails = ({ projectId, onClose }) => {
 
   const fetchProjectDetails = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/projects/${projectId}/details`);
+      const response = await axios.get(`https://client-search-page-1.onrender.com/api/projects/${projectId}/details`);
       if (response.data.success) {
         setProject(response.data.project);
         setPayments(response.data.payments);
