@@ -38,6 +38,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "axios.post": "https://client-search-page-1.onrender.com/api/clients"
+  }
 }
