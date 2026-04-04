@@ -19,7 +19,18 @@ const protect = async (req, res, next) => {
   }
 
   try {
-    // Verify token
+    // Check if it's a fake client token (from client code login)
+    if (token.startsWith('client-')) {
+      // For client tokens, create a mock admin object
+      req.admin = {
+        id: token,
+        name: 'Client User',
+        role: 'client-admin'
+      };
+      return next();
+    }
+
+    // Verify JWT token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Get admin from token
