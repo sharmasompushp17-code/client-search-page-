@@ -35,6 +35,11 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/reports', reportRoutes);
 
+// Home Route (fix Cannot GET /)
+app.get('/', (req, res) => {
+  res.send('Backend is running 🚀');
+});
+
 // Health Check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
