@@ -1,14 +1,29 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 
-// Initialize Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
+// Initialize Razorpay instance only if keys are available
+let razorpay = null;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+  });
+} else {
+  console.log('Razorpay not configured - payment features disabled');
+}
+
+// Helper to check if Razorpay is configured
+const isRazorpayConfigured = () => razorpay !== null;
 
 // Create order
 const createOrder = async (amount, currency = 'INR', receipt = null) => {
+  if (!isRazorpayConfigured()) {
+    return {
+      success: false,
+      error: 'Razorpay not configured - payment features disabled'
+    };
+  }
+
   try {
     const options = {
       amount: amount * 100, // Razorpay expects amount in paise
@@ -50,6 +65,13 @@ const verifyPaymentSignature = (orderId, paymentId, signature) => {
 
 // Fetch payment details
 const fetchPayment = async (paymentId) => {
+  if (!isRazorpayConfigured()) {
+    return {
+      success: false,
+      error: 'Razorpay not configured - payment features disabled'
+    };
+  }
+
   try {
     const payment = await razorpay.payments.fetch(paymentId);
     return {
@@ -67,6 +89,13 @@ const fetchPayment = async (paymentId) => {
 
 // Create UPI payment link
 const createUPILink = async (amount, description, customerEmail, customerPhone) => {
+  if (!isRazorpayConfigured()) {
+    return {
+      success: false,
+      error: 'Razorpay not configured - payment features disabled'
+    };
+  }
+
   try {
     const paymentLink = await razorpay.paymentLink.create({
       amount: amount * 100,

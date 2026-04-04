@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiUsers, FiFolder, FiDollarSign, FiTrendingUp, FiClock, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
+import { FiUsers, FiFolder, FiDollarSign, FiAlertCircle } from 'react-icons/fi';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FiX, FiDollarSign, FiCalendar, FiUser, FiCheckCircle, FiAlertCircle, FiClock, FiTrendingUp } from 'react-icons/fi';
@@ -10,11 +10,7 @@ const ProjectDetails = ({ projectId, onClose }) => {
   const [payments, setPayments] = useState([]);
   const [statistics, setStatistics] = useState(null);
 
-  useEffect(() => {
-    fetchProjectDetails();
-  }, [projectId]);
-
-  const fetchProjectDetails = async () => {
+  const fetchProjectDetails = useCallback(async () => {
     try {
       const response = await axios.get(`/api/projects/${projectId}/details`);
       if (response.data.success) {
@@ -28,7 +24,11 @@ const ProjectDetails = ({ projectId, onClose }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [projectId]);
+
+  useEffect(() => {
+    fetchProjectDetails();
+  }, [fetchProjectDetails, projectId]);
 
   const getStatusColor = (status) => {
     const colors = {

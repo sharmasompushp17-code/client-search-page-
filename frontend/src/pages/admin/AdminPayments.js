@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FiPlus, FiSearch, FiDollarSign, FiUser, FiFolder, FiCalendar, FiCreditCard, FiX, FiCheck, FiDownload } from 'react-icons/fi';
@@ -20,12 +20,7 @@ const AdminPayments = () => {
     notes: ''
   });
 
-  useEffect(() => {
-    fetchPayments();
-    fetchClients();
-  }, []);
-
-  const fetchPayments = async () => {
+  const fetchPayments = useCallback(async () => {
     try {
       const response = await axios.get('/api/payments', {
         params: { status: statusFilter }
@@ -38,9 +33,9 @@ const AdminPayments = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter]);
 
-  const fetchClients = async () => {
+  const fetchClients = useCallback(async () => {
     try {
       const response = await axios.get('/api/clients');
       if (response.data.success) {
@@ -49,7 +44,7 @@ const AdminPayments = () => {
     } catch (error) {
       console.error('Failed to fetch clients');
     }
-  };
+  }, []);
 
   const fetchProjects = async (clientId) => {
     if (!clientId) {
@@ -66,6 +61,11 @@ const AdminPayments = () => {
       console.error('Failed to fetch projects');
     }
   };
+
+  useEffect(() => {
+    fetchPayments();
+    fetchClients();
+  }, [fetchPayments, fetchClients]);
 
   useEffect(() => {
     fetchPayments();

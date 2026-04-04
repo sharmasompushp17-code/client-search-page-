@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FiDollarSign, FiFolder, FiUsers, FiTrendingUp, FiAlertCircle, FiDownload } from 'react-icons/fi';
@@ -38,11 +38,7 @@ const AdminReports = () => {
   const [clientReport, setClientReport] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  useEffect(() => {
-    fetchAllReports();
-  }, [selectedYear]);
-
-  const fetchAllReports = async () => {
+  const fetchAllReports = useCallback(async () => {
     setLoading(true);
     try {
       const [dashboardRes, earningsRes, pendingRes, projectRes, clientRes] = await Promise.all([
@@ -63,7 +59,11 @@ const AdminReports = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedYear]);
+
+  useEffect(() => {
+    fetchAllReports();
+  }, [fetchAllReports, selectedYear]);
 
   const downloadReport = (reportType) => {
     let data = '';

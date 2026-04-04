@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiUser, FiMail, FiPhone, FiX, FiCheck } from 'react-icons/fi';
@@ -24,11 +24,7 @@ const AdminClients = () => {
     notes: ''
   });
 
-  useEffect(() => {
-    fetchClients();
-  }, []);
-
-  const fetchClients = async () => {
+  const fetchClients = useCallback(async () => {
     try {
       const response = await axios.get('/api/clients', {
         params: { search: searchTerm }
@@ -41,7 +37,11 @@ const AdminClients = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm]);
+
+  useEffect(() => {
+    fetchClients();
+  }, [fetchClients]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {

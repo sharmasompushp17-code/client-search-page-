@@ -9,7 +9,6 @@ const ClientDashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [clientData, setClientData] = useState(location.state?.clientData || null);
-  const [loading, setLoading] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(null);
   const [showAmountPanel, setShowAmountPanel] = useState(false);
   const [showProjectPanel, setShowProjectPanel] = useState(false);
