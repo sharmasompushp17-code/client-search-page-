@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiPlus, FiSearch, FiDollarSign, FiUser, FiFolder, FiCalendar, FiCreditCard, FiX, FiCheck, FiDownload } from 'react-icons/fi';
+import { FiPlus, FiSearch, FiDollarSign, FiX, FiCheck, FiDownload } from 'react-icons/fi';
 
 const AdminPayments = () => {
   const [payments, setPayments] = useState([]);
@@ -69,7 +69,7 @@ const AdminPayments = () => {
 
   useEffect(() => {
     fetchPayments();
-  }, [statusFilter]);
+  }, [statusFilter, fetchPayments]);
 
   useEffect(() => {
     if (formData.clientId) {

@@ -49,7 +49,7 @@ const AdminClients = () => {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm]);
+  }, [searchTerm, fetchClients]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiFolder, FiUser, FiCalendar, FiDollarSign, FiX, FiCheck, FiEye } from 'react-icons/fi';
@@ -25,12 +25,7 @@ const AdminProjects = () => {
     notes: ''
   });
 
-  useEffect(() => {
-    fetchProjects();
-    fetchClients();
-  }, []);
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await axios.get('https://client-search-page-1.onrender.com/api/projects', {
         params: { search: searchTerm, status: statusFilter }
@@ -43,9 +38,9 @@ const AdminProjects = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm, statusFilter]);
 
-  const fetchClients = async () => {
+  const fetchClients = useCallback(async () => {
     try {
       const response = await axios.get('https://client-search-page-1.onrender.com/api/clients');
       if (response.data.success) {
@@ -54,7 +49,12 @@ const AdminProjects = () => {
     } catch (error) {
       console.error('Failed to fetch clients');
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchProjects();
+    fetchClients();
+  }, [fetchProjects, fetchClients]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -62,7 +62,7 @@ const AdminProjects = () => {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm, statusFilter]);
+  }, [fetchProjects]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
