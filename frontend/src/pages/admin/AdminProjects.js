@@ -158,14 +158,18 @@ const AdminProjects = () => {
   };
 
   const handleStatusChange = async (projectId, newStatus) => {
+    console.log('Updating status:', projectId, newStatus);
     try {
-      const response = await axios.put(`/api/projects/${projectId}`, { status: newStatus });
+      const response = await axios.put(`https://client-search-page-1.onrender.com/api/projects/${projectId}`, { status: newStatus });
       if (response.data.success) {
         toast.success('Status updated successfully');
         fetchProjects();
       }
     } catch (error) {
-      toast.error('Failed to update status');
+      console.error('Status update error:', error);
+      console.error('Error response:', error.response);
+      console.error('Error message:', error.message);
+      toast.error(`Failed to update status: ${error.response?.data?.message || error.message}`);
     }
   };
 
