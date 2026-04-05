@@ -27,19 +27,58 @@ if (!process.env.MONGODB_URI) {
   process.exit(1);
 }
 
-console.log('🔗 Connecting to MongoDB Atlas...');
-console.log('📍 Database URL:', process.env.MONGODB_URI.replace(/:.*@/, ':****@')); // Hide credentials in logs
-
-// Database Connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('✅ MongoDB Connected Successfully to Atlas'))
-.catch(err => {
-  console.error('❌ MongoDB Connection Error:', err.message);
+// Validate MongoDB URI format
+const mongoURI = process.env.MONGODB_URI;
+if (!mongoURI.startsWith('mongodb://') && !mongoURI.startsWith('mongodb+srv://')) {
+  console.error('❌ ERROR: Invalid MONGODB_URI format!');
+  console.error('URI must start with mongodb:// or mongodb+srv://');
   process.exit(1);
-});
+}
+
+// Check for common issues
+if (mongoURI.includes(' ')) {
+  console.error('❌ ERROR: MONGODB_URI contains spaces!');
+  console.error('Remove all spaces from the connection string.');
+  process.exit(1);
+}
+
+console.log('🔗 Connecting to MongoDB Atlas...');
+// Safely log URI (hide credentials)
+const sanitizedURI = mongoURI.replace(/(mongodb\+srv:\/\/[^:]+:)([^@]+)(@.+)/, '$1****$3');
+console.log('📍 Database URL:', sanitizedURI);
+
+// Database Connection with retry logic
+const connectDB = async () => {
+  try {
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('✅ MongoDB Connected Successfully to Atlas');
+  } catch (err) {
+    console.error('❌ MongoDB Connection Error:', err.message);
+    
+    // Check for specific error types
+    if (err.message.includes('authentication failed') || err.message.includes('invalid candidate')) {
+      console.error('\n🔍 Possible causes:');
+      console.error('1. Username/password is incorrect');
+      console.error('2. Special characters (@, :, #, etc.) in password need URL encoding');
+      console.error('   Example: p@ssword → p%40ssword');
+      console.error('3. Database user does not exist in MongoDB Atlas');
+      console.error('\n💡 Fix: Go to MongoDB Atlas → Database Access → Reset password');
+      console.error('   Use only alphanumeric characters in password to avoid encoding issues.');
+    }
+    
+    if (err.message.includes('IP')) {
+      console.error('\n🔍 Your IP is not whitelisted in MongoDB Atlas!');
+      console.error('💡 Fix: MongoDB Atlas → Network Access → Add IP Address → 0.0.0.0/0');
+    }
+    
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
