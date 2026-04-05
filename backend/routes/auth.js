@@ -157,4 +157,21 @@ router.post('/setup', async (req, res) => {
   }
 });
 
+// @route   GET /api/auth/status
+// @desc    Check admin exists (for debugging)
+// @access  Public
+router.get('/status', async (req, res) => {
+  try {
+    const adminCount = await Admin.countDocuments();
+    res.json({
+      success: true,
+      adminExists: adminCount > 0,
+      adminCount,
+      message: adminCount > 0 ? 'Admin exists' : 'No admin - run POST /api/auth/setup to create'
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 module.exports = router;
