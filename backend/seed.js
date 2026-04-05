@@ -6,13 +6,23 @@ const Admin = require('./models/Admin');
 
 const seedAdmin = async () => {
   try {
+    // Check for required environment variables
+    if (!process.env.MONGODB_URI) {
+      console.error('❌ ERROR: MONGODB_URI environment variable is not set!');
+      console.error('Please set your MongoDB Atlas connection string in environment variables.');
+      process.exit(1);
+    }
+
+    console.log('🔗 Connecting to MongoDB Atlas...');
+    console.log('📍 Database URL:', process.env.MONGODB_URI.replace(/:.*@/, ':****@'));
+
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/client_management', {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
 
-    console.log('MongoDB Connected');
+    console.log('✅ MongoDB Connected to Atlas');
 
     // Check if admin already exists
     const existingAdmin = await Admin.findOne({ email: process.env.ADMIN_EMAIL });

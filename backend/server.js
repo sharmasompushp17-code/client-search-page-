@@ -20,13 +20,26 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Check for required environment variables
+if (!process.env.MONGODB_URI) {
+  console.error('❌ ERROR: MONGODB_URI environment variable is not set!');
+  console.error('Please set your MongoDB Atlas connection string in environment variables.');
+  process.exit(1);
+}
+
+console.log('🔗 Connecting to MongoDB Atlas...');
+console.log('📍 Database URL:', process.env.MONGODB_URI.replace(/:.*@/, ':****@')); // Hide credentials in logs
+
 // Database Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/client_management', {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('MongoDB Connected Successfully'))
-.catch(err => console.error('MongoDB Connection Error:', err));
+.then(() => console.log('✅ MongoDB Connected Successfully to Atlas'))
+.catch(err => {
+  console.error('❌ MongoDB Connection Error:', err.message);
+  process.exit(1);
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
